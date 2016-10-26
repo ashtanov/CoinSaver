@@ -1,0 +1,8 @@
+﻿@model CoinSaver.Models.PurName
+<form class="form-inline" asp-action="Index" >
+    <input asp-for="Name" hidden/>
+    <input asp-for="Pur.purshaseName" placeholder="Название" />
+    <input asp-for="Pur.price" placeholder="Цена" />
+    <input asp-for="Pur.reason" placeholder="Причина" />
+    <button class="btn btn-lg btn-primary" type="submit">Добавить</button>
+</form>

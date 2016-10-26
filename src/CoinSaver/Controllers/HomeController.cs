@@ -8,23 +8,37 @@ namespace CoinSaver.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly Models.IDataLayer _db;
+        public HomeController(Models.IDataLayer db)
         {
-            return View();
+            _db = db;
         }
 
-        public IActionResult About()
+        [HttpPost]
+        public IActionResult EnterName(Models.EnteredName name)
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
+            if (name != null)
+                return RedirectToAction("Index", new { id = name.Name });
+            else
+                return RedirectToAction("Error");
         }
 
-        public IActionResult Contact()
+        public IActionResult Index(string id)
         {
-            ViewData["Message"] = "Your contact page.";
+            if(id == null)
+                return View();
+            return View(new Models.IndexViewModel { Name = id, Purchases = _db.GetSpendings(id) });
+        }
 
-            return View();
+        [HttpPost]
+        public async Task<IActionResult> Index(Models.PurName spending)
+        {
+            if (spending.Pur != null)
+            {
+                spending.Pur.date = DateTime.Now;
+                await _db.SaveSpendingAsync(spending.Name, spending.Pur);
+            }
+            return RedirectToAction("Index", new { id = spending.Name });
         }
 
         public IActionResult Error()
