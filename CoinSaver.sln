@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{72D6E845-AC08-459A-8395-AD3AD26F249E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FD34225E-E717-42E1-BBA9-2D6E934E967A}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CoinSaver", "src\CoinSaver\CoinSaver.xproj", "{7F7092B6-8360-49C1-A8DB-FF879EC1AE02}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F7092B6-8360-49C1-A8DB-FF879EC1AE02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F7092B6-8360-49C1-A8DB-FF879EC1AE02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F7092B6-8360-49C1-A8DB-FF879EC1AE02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F7092B6-8360-49C1-A8DB-FF879EC1AE02}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7F7092B6-8360-49C1-A8DB-FF879EC1AE02} = {72D6E845-AC08-459A-8395-AD3AD26F249E}
+	EndGlobalSection
+EndGlobal
