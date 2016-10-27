@@ -5,10 +5,12 @@
 
 @if (Model != null)
 {
-    @Html.Partial("AddSpending", new CoinSaver.Models.PurName { Name = Model.Name })
+    <div class="page-header">
+        @Html.Partial("AddSpending", new CoinSaver.Models.PurNameVM {Name = Model.Name})
+    </div>
     <div class="row">
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -16,19 +18,22 @@
                         <th>Цена</th>
                         <th>Дата</th>
                         <th>Причина</th>
+                        <th>Категория</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @{int i = 1;
+                    @{
+                        int i = 1;
                     }
-                    @foreach (var p in Model.Purchases.OrderByDescending(x => x.date))
+                    @foreach (var p in Model.Purchases.OrderByDescending(x => x.Date))
                     {
                         <tr>
                             <td>@i</td>
-                            <td>@p.purshaseName</td>
-                            <td>@p.price</td>
-                            <td>@p.date</td>
-                            <td>@p.reason</td>
+                            <td>@p.PurchaseName</td>
+                            <td>@p.Price</td>
+                            <td>@p.Date</td>
+                            <td>@p.Reason</td>
+                            <td>@p.Category.EnumDisplayNameFor()</td>
                         </tr>
                         i++;
                     }
@@ -39,5 +44,5 @@
 }
 else
 {
-    @Html.Partial("EnterName", new CoinSaver.Models.EnteredName());
+    @Html.Partial("EnterName", new CoinSaver.Models.EnteredNameVM());
 }

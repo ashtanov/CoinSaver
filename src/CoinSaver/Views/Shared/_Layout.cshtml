@@ -28,6 +28,13 @@
                 </button>
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CoinSaver</a>
             </div>
+            @if (!string.IsNullOrWhiteSpace(@ViewData["Name"] as string))
+            {
+                <div class="navbar-form navbar-right">
+                    <label class="btn btn-info">@ViewData["Name"]</label>
+                </div>
+            }
+            
         </div>
     </div>
     <div class="container body-content">

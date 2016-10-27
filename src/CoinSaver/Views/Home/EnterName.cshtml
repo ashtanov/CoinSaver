@@ -1,6 +1,9 @@
-﻿@model CoinSaver.Models.EnteredName
-<form class="form-inline" asp-action="Index">
-    <label asp-for="Name"></label>
-    <input asp-for="Name"/>
-    <button type="submit">Перейти</button>
-</form>
+﻿@model CoinSaver.Models.EnteredNameVM
+
+<div class="content">
+    <form class="form-signin" asp-action="Index" role="form">
+        <h2 class="form-signin-heading">Введите имя</h2>
+        <input autofocus="" class="form-control" placeholder="Имя" asp-for="Name"/>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Перейти</button>
+    </form>
+</div>

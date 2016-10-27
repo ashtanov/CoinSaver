@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CoinSaver.Models
 {
-    public class EnteredName
+    public class EnteredNameVM
     {
         public string Name { get; set; }
     }

@@ -1,8 +1,18 @@
-﻿@model CoinSaver.Models.PurName
-<form class="form-inline" asp-action="Index" >
-    <input asp-for="Name" hidden/>
-    <input asp-for="Pur.purshaseName" placeholder="Название" />
-    <input asp-for="Pur.price" placeholder="Цена" />
-    <input asp-for="Pur.reason" placeholder="Причина" />
-    <button class="btn btn-lg btn-primary" type="submit">Добавить</button>
-</form>
+﻿@model CoinSaver.Models.PurNameVM
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Добавить покупку</h3>
+    </div>
+    <div class="panel-body">
+        <form class="navbar-form" asp-action="Index">
+            <input asp-for="Name" hidden />
+            <input class="form-control" asp-for="Pur.PurchaseName" placeholder="Название" />
+            <input class="form-control" asp-for="Pur.Price" placeholder="Цена" />
+            <input class="form-control" asp-for="Pur.Reason" placeholder="Причина" />
+            <select class="form-control" asp-for="Pur.Category" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseCategory>()" class="form-control"></select>
+            <button class="btn btn-success" type="submit">Добавить</button>
+        </form>
+    </div>
+</div>
+

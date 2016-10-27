@@ -7,7 +7,7 @@ namespace CoinSaver.Models
 {
     public interface IDataLayer
     {
-        Task SaveSpendingAsync(string name, Purchase spanding);
+        Task SaveSpendingAsync(string name, Purchase spending);
         IEnumerable<Purchase> GetSpendings(string name);
     }
 }

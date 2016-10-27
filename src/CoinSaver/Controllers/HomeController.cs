@@ -15,27 +15,34 @@ namespace CoinSaver.Controllers
         }
 
         [HttpPost]
-        public IActionResult EnterName(Models.EnteredName name)
+        public IActionResult EnterName(Models.EnteredNameVM name)
         {
             if (name != null)
                 return RedirectToAction("Index", new { id = name.Name });
-            else
-                return RedirectToAction("Error");
+            return RedirectToAction("Error");
+        }
+
+        public IActionResult Stat(string id)
+        {
+            if (id == null)
+                return View();
+            return View();
         }
 
         public IActionResult Index(string id)
         {
-            if(id == null)
+            ViewData["Name"] = id;
+            if (id == null)
                 return View();
             return View(new Models.IndexViewModel { Name = id, Purchases = _db.GetSpendings(id) });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(Models.PurName spending)
+        public async Task<IActionResult> Index(Models.PurNameVM spending)
         {
-            if (spending.Pur != null)
+            if (spending.Pur != null && spending.Pur.IsValid)
             {
-                spending.Pur.date = DateTime.Now;
+                spending.Pur.Date = DateTime.Now;
                 await _db.SaveSpendingAsync(spending.Name, spending.Pur);
             }
             return RedirectToAction("Index", new { id = spending.Name });

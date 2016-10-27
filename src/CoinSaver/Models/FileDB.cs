@@ -13,7 +13,14 @@ namespace CoinSaver.Models
         public FileDB()
         {
             _db = new Dictionary<string, List<Purchase>>();
-            LoadDB();
+            try
+            {
+                LoadDB();
+            }
+            catch
+            {
+                // ignored
+            }
         }
 
         IEnumerable<Purchase> IDataLayer.GetSpendings(string name)
@@ -41,7 +48,7 @@ namespace CoinSaver.Models
 
         private async Task SaveDB()
         {
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            var sb = new System.Text.StringBuilder();
             foreach (var kvp in _db)
             {
                 sb.AppendLine($"@@@{kvp.Key}@@@");

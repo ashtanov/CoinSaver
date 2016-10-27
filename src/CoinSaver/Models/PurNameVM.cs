@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CoinSaver.Models
 {
-    public class PurName
+    public class PurNameVM
     {
         public string Name { get; set; }
         public Purchase Pur { get; set; }

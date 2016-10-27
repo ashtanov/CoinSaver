@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,10 +8,11 @@ namespace CoinSaver.Models
 {
     public class Purchase
     {
-        public int price { get; set; }
-        public string purshaseName { get; set; }
+        [Range(1, 99999999)]
+        public int Price { get; set; }
+        public string PurchaseName { get; set; }
         private string _reason;
-        public string reason {
+        public string Reason {
             get
             {
                 return _reason;
@@ -20,17 +22,28 @@ namespace CoinSaver.Models
                 _reason = value?.Replace("\n", " ")?.Replace("\t", " ")?.Replace("@@@", " ");
             }
         }
-        public DateTime date { get; set; }
+        public DateTime Date { get; set; }
+
+        public PurchaseCategory Category { get; set; }
 
         public override string ToString()
         {
-            return $"{purshaseName}\t{price}\t{reason}\t{date}";
+            return $"{PurchaseName}\t{Price}\t{Reason}\t{Date}\t{Category}";
         }
 
         public static Purchase Parse(string purchase)
         {
             var res = purchase.Split('\t');
-            return new Purchase { price = int.Parse(res[1]), purshaseName = res[0], reason = res[2], date = DateTime.Parse(res[3]) };
+            return new Purchase
+            {
+                Price = int.Parse(res[1]),
+                PurchaseName = res[0],
+                Reason = res[2],
+                Date = DateTime.Parse(res[3]),
+                Category = (PurchaseCategory)Enum.Parse(typeof(PurchaseCategory),res[4])
+            };
         }
+
+        public bool IsValid => Price > 0 && !string.IsNullOrWhiteSpace(PurchaseName);
     }
 }
