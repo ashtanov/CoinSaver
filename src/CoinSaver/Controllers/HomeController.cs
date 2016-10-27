@@ -24,9 +24,31 @@ namespace CoinSaver.Controllers
 
         public IActionResult Stat(string id)
         {
+            ViewData["Name"] = id;
             if (id == null)
-                return View();
-            return View();
+                return RedirectToAction("Error");
+            var spendings = _db.GetSpendings(id);
+
+            var totalSpend = spendings.Sum(x => x.Price);
+            var calcStat = spendings
+                        .GroupBy(x => x.Category)
+                        .ToDictionary(k => k.Key, e => new Models.StatVM.CountAndSumm
+                        {
+                            Count = e.Count(),
+                            Summ = e.Sum(c => c.Price)
+                        });
+            var pbp = new List<KeyValuePair<Models.PurchaseCategory, string>>
+                        (calcStat
+                            .Select(x => new KeyValuePair<Models.PurchaseCategory, string>(x.Key, ((x.Value.Summ + 0.0) / totalSpend * 100).ToString().Replace(',','.'))));
+            return View(
+                new Models.StatVM
+                {
+                    Name = id,
+                    TotalPurchases = spendings.Count(),
+                    TotalSpend = spendings.Sum(x => x.Price),
+                    PurchasesByCategory = calcStat,
+                    ProgressBarPercentage = pbp
+                });
         }
 
         public IActionResult Index(string id)

@@ -23,5 +23,19 @@ namespace CoinSaver
 
             return new HtmlString(item.ToString());
         }
+
+        public static HtmlString EnumColorFor(this Enum item)
+        {
+            var type = item.GetType();
+            var member = type.GetMember(item.ToString());
+            ColorAttribute color = (ColorAttribute)member[0].GetCustomAttributes(typeof(ColorAttribute), false).FirstOrDefault();
+
+            if (color != null)
+            {
+                return new HtmlString(color.HexColor);
+            }
+
+            return new HtmlString(item.ToString());
+        }
     }
 }

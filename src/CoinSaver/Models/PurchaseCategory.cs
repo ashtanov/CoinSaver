@@ -8,21 +8,40 @@ namespace CoinSaver.Models
 {
     public enum PurchaseCategory
     {
+        [Color("#cfcfd1")]
         [Display(Name = "Другое")]
         Other,
+
+        [Color("#d8a245")]
         [Display(Name = "Кафе и рестораны")]
         Cafe,
-        [Display(Name = "Магазины")]
+
+        [Color("#3bafe5")]
+        [Display(Name = "Гипермаркет")]
         Shop,
+
+        [Color("#62d68b")]
         [Display(Name = "Аптека")]
         Medicine,
+
+        [Color("#d1d11f")]
         [Display(Name = "Городской транспорт")]
         Transport,
+
+        [Color("#bc79e5")]
         [Display(Name = "Одежда и обувь")]
         Clothes,
+
+        [Color("#f92525")]
         [Display(Name = "Развлечения")]
         Entertainments,
+
+        [Color("#97ea07")]
         [Display(Name = "Путешествия")]
-        Travels
+        Travels,
+
+        [Color("#f271a9")]
+        [Display(Name = "Красота и здоровье")]
+        Beauty
     }
 }

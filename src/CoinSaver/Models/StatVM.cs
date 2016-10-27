@@ -7,12 +7,16 @@ namespace CoinSaver.Models
 {
     public class StatVM
     {
+        public class CountAndSumm
+        {
+            public int Count { get; set; }
+            public int Summ { get; set; }
+        }
+
         public string Name { get; set; }
         public int TotalSpend { get; set; }
-        public int SpendLastMonth { get; set; }
-
-        public int TotalPurchises { get; set; }
-        public int PurchisesLastMonth { get; set; }
-
+        public int TotalPurchases { get; set; }
+        public Dictionary<PurchaseCategory, CountAndSumm> PurchasesByCategory { get; set; }
+        public List<KeyValuePair<PurchaseCategory, string>> ProgressBarPercentage { get; set; }
     }
 }

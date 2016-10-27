@@ -10,7 +10,9 @@
             <input class="form-control" asp-for="Pur.PurchaseName" placeholder="Название" />
             <input class="form-control" asp-for="Pur.Price" placeholder="Цена" />
             <input class="form-control" asp-for="Pur.Reason" placeholder="Причина" />
-            <select class="form-control" asp-for="Pur.Category" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseCategory>()" class="form-control"></select>
+            <select class="form-control" asp-for="Pur.Category" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseCategory>()">
+                <option>Выберите категорию</option>
+            </select>
             <button class="btn btn-success" type="submit">Добавить</button>
         </form>
     </div>

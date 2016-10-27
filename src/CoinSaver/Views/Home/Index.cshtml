@@ -33,7 +33,7 @@
                             <td>@p.Price</td>
                             <td>@p.Date</td>
                             <td>@p.Reason</td>
-                            <td>@p.Category.EnumDisplayNameFor()</td>
+                            <td style="background-color: @p.Category.EnumColorFor()">@p.Category.EnumDisplayNameFor()</td>
                         </tr>
                         i++;
                     }
