@@ -16,7 +16,7 @@
                             <td>@Model.TotalSpend</td>
                         </tr>
                         <tr>
-                            <td>Общее количество трат:</td>
+                            <td>Общее количество покупок:</td>
                             <td>@Model.TotalPurchases</td>
                         </tr>
                     </tbody>
@@ -25,18 +25,46 @@
         </div>
     </div>
 </div>
-<ul class="list-group">
-    @foreach (var kvp in Model.PurchasesByCategory)
-    {
-        <li class="list-group-item" style="background-color:@kvp.Key.EnumColorFor()">
-            @kvp.Key.EnumDisplayNameFor() Покупок: @kvp.Value.Count Всего потрачено: @kvp.Value.Summ
-        </li>
-    }
+<div class="table-responsive">
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <th>Категория</th>
+                <th>Покупок</th>
+                <th>Потрачено</th>
+            </tr>
+            @foreach (var kvp in Model.PurchasesByCategory)
+            {
 
-</ul>
+                <tr style="background-color: @kvp.Key.EnumColorFor()">
+                    <td>@kvp.Key.EnumDisplayNameFor()</td>
+                    <td>@kvp.Value.Count</td>
+                    <td>@kvp.Value.Summ</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 <div class="progress">
     @foreach (var p in Model.ProgressBarPercentage)
     {
         <div class="progress-bar" style="width: @p.Value%; background-color: @p.Key.EnumColorFor()"></div>
     }
+</div>
+<div class="table-hover">
+    <table class="table table-condensed">
+        <tbody>
+            @foreach (var p in Model.ProgressBarPercentage)
+            {
+                <tr>
+                    <td style="width:30px">@p.Key.EnumDisplayNameFor()</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: @p.Value%; background-color: @p.Key.EnumColorFor()"></div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
