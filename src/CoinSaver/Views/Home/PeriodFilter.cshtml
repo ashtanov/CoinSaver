@@ -1,0 +1,26 @@
+﻿@model CoinSaver.Models.PeriodVM
+<div class="content">
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li><div class="navbar-brand">Период: </div></li>
+            <li>
+                <form class="navbar-form" asp-action="Stat" method="get">
+                    <input hidden name="IsActive" checked="checked" value="true">
+                    <input hidden id="Name" value="@ViewData["Name"]" />
+                    <input class="form-control" placeholder="Начало" asp-for="Start" />
+                    <input class="form-control" placeholder="Конец" asp-for="End" />
+                    <button class="btn btn-success" type="submit">Отфильтровать</button>
+                </form>
+            </li>
+            <li>
+                <form class="navbar-btn" asp-action="Stat">
+                    <input hidden name="IsActive" value="false">
+                    <input hidden id="Name" value="@ViewData["Name"]" />
+                    <button class="btn btn-success" type="submit">Сбросить</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+
+</div>

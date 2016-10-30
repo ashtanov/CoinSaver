@@ -10,8 +10,12 @@ namespace CoinSaver.Models
     {
         [Range(1, 99999999)]
         public int Price { get; set; }
+
+        [Required]
         public string PurchaseName { get; set; }
+
         private string _reason;
+
         public string Reason {
             get
             {
@@ -43,7 +47,5 @@ namespace CoinSaver.Models
                 Category = (PurchaseCategory)Enum.Parse(typeof(PurchaseCategory),res[4])
             };
         }
-
-        public bool IsValid => Price > 0 && !string.IsNullOrWhiteSpace(PurchaseName);
     }
 }

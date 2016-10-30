@@ -22,13 +22,22 @@ namespace CoinSaver.Controllers
             return RedirectToAction("Error");
         }
 
-        public IActionResult Stat(string id)
+        public IActionResult Stat(string id, Models.PeriodVM period)
         {
             ViewData["Name"] = id;
             if (id == null)
                 return RedirectToAction("Error");
             var spendings = _db.GetSpendings(id);
 
+            //filter by period
+            if(period != null && period.IsActive)
+            {
+                DateTime startFormat = period.Start.Date;
+                DateTime endFormat = period.End.Date.AddDays(1).AddSeconds(-1);
+                spendings = spendings.Where(x => x.Date >= startFormat && x.Date <= endFormat);
+            }
+
+            //calc stat model
             var totalSpend = spendings.Sum(x => x.Price);
             var calcStat = spendings
                         .GroupBy(x => x.Category)
@@ -37,7 +46,7 @@ namespace CoinSaver.Controllers
                             Count = e.Count(),
                             Summ = e.Sum(c => c.Price)
                         });
-            var pbp = new List<KeyValuePair<Models.PurchaseCategory, string>>
+            var histPerc = new List<KeyValuePair<Models.PurchaseCategory, string>>
                         (calcStat
                             .Select(x => new KeyValuePair<Models.PurchaseCategory, string>(x.Key, ((x.Value.Summ + 0.0) / totalSpend * 100).ToString().Replace(',','.'))));
             return View(
@@ -47,7 +56,8 @@ namespace CoinSaver.Controllers
                     TotalPurchases = spendings.Count(),
                     TotalSpend = spendings.Sum(x => x.Price),
                     PurchasesByCategory = calcStat,
-                    ProgressBarPercentage = pbp
+                    HistogrammPercentage = histPerc,
+                    Period = period
                 });
         }
 
@@ -60,9 +70,10 @@ namespace CoinSaver.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(Models.PurNameVM spending)
         {
-            if (spending.Pur != null && spending.Pur.IsValid)
+            if (spending.Pur != null && ModelState.IsValid)
             {
                 spending.Pur.Date = DateTime.Now;
                 await _db.SaveSpendingAsync(spending.Name, spending.Pur);

@@ -17,6 +17,7 @@ namespace CoinSaver.Models
         public int TotalSpend { get; set; }
         public int TotalPurchases { get; set; }
         public Dictionary<PurchaseCategory, CountAndSumm> PurchasesByCategory { get; set; }
-        public List<KeyValuePair<PurchaseCategory, string>> ProgressBarPercentage { get; set; }
+        public List<KeyValuePair<PurchaseCategory, string>> HistogrammPercentage { get; set; }
+        public PeriodVM Period { get; set; }
     }
 }

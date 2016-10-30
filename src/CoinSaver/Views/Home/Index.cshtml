@@ -9,37 +9,7 @@
         @Html.Partial("AddSpending", new CoinSaver.Models.PurNameVM {Name = Model.Name})
     </div>
     <div class="row">
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Название</th>
-                        <th>Цена</th>
-                        <th>Дата</th>
-                        <th>Причина</th>
-                        <th>Категория</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        int i = 1;
-                    }
-                    @foreach (var p in Model.Purchases.OrderByDescending(x => x.Date))
-                    {
-                        <tr>
-                            <td>@i</td>
-                            <td>@p.PurchaseName</td>
-                            <td>@p.Price</td>
-                            <td>@p.Date.ToString("dd.MM.yy")</td>
-                            <td>@p.Reason</td>
-                            <td style="background-color: @p.Category.EnumColorFor()">@p.Category.EnumDisplayNameFor()</td>
-                        </tr>
-                        i++;
-                    }
-                </tbody>
-            </table>
-        </div>
+        @Html.Partial("SpendingsTable", Model)
     </div>
 }
 else

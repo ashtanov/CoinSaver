@@ -2,10 +2,22 @@
 @{
     ViewData["Title"] = "Статистика";
 }
+
+<div class="panel panel-default row">
+    <div class="panel-heading">
+        @Html.Partial("PeriodFilter", new CoinSaver.Models.PeriodVM())
+    </div>
+</div>
 <div class="page-header">
     <div class="panel panel-default row">
         <div class="panel-heading">
-            <h3 class="panel-title">Общие траты для @Model.Name</h3>
+            <h3 class="panel-title">
+                Общие траты для <strong>@Model.Name</strong>
+                @if (Model.Period != null && Model.Period.IsActive)
+                {
+                <span>за @Model.Period.Start.ToString("dd.MM.yy") - @Model.Period.End.ToString("dd.MM.yy")</span>
+                }
+            </h3>
         </div>
         <div class="panel-body">
             <div class="table-responsive ">
@@ -36,35 +48,55 @@
             @foreach (var kvp in Model.PurchasesByCategory)
             {
 
-                <tr style="background-color: @kvp.Key.EnumColorFor()">
-                    <td>@kvp.Key.EnumDisplayNameFor()</td>
-                    <td>@kvp.Value.Count</td>
-                    <td>@kvp.Value.Summ</td>
-                </tr>
+            <tr style="background-color: @kvp.Key.EnumColorFor()">
+                <td>@kvp.Key.EnumDisplayNameFor()</td>
+                <td>@kvp.Value.Count</td>
+                <td>@kvp.Value.Summ</td>
+            </tr>
             }
         </tbody>
     </table>
 </div>
 <div class="progress">
-    @foreach (var p in Model.ProgressBarPercentage)
+    @foreach (var p in Model.HistogrammPercentage)
     {
-        <div class="progress-bar" style="width: @p.Value%; background-color: @p.Key.EnumColorFor()"></div>
+    <div class="progress-bar" style="width: @p.Value%; background-color: @p.Key.EnumColorFor()"></div>
     }
 </div>
 <div class="table-hover">
     <table class="table table-condensed">
         <tbody>
-            @foreach (var p in Model.ProgressBarPercentage)
+            @foreach (var p in Model.HistogrammPercentage)
             {
                 <tr>
                     <td style="width:30px">@p.Key.EnumDisplayNameFor()</td>
                     <td>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: @p.Value%; background-color: @p.Key.EnumColorFor()"></div>
+                        <div class="progress" style="width: @p.Value%">
+                            <div class="progress-bar" style="width: 100%; background-color: @p.Key.EnumColorFor()"></div>
                         </div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+</div>
+<div>
+    <!-- Навигация -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#tab_All" aria-controls="tab_All" role="tab" data-toggle="tab">Все</a></li>
+        @foreach (var p in Model.HistogrammPercentage)
+        {
+            <li><a style="background-color: @p.Key.EnumColorFor()" href="#tab_@p.Key" aria-controls="tab_@p.Key" role="tab" data-toggle="tab">@p.Key.EnumDisplayNameFor()</a></li>
+        }
+    </ul>
+    @*<a asp-action="Edit" asp-controller="Home" asp-route-area="Global" asp-route-id="" data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#tab_content"></a>*@
+    <!-- Содержимое вкладок -->
+    <div class="tab-content">
+        <div id="tab_content"></div>
+        <div role="tabpanel" class="tab-pane active" id="tab_All">Все</div>
+        @foreach (var p in Model.HistogrammPercentage)
+        {
+            <div role="tabpanel" class="tab-pane" id="tab_@p.Key">@p.Value</div>
+        }
+    </div>
 </div>
