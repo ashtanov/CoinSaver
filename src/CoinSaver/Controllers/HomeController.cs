@@ -30,25 +30,32 @@ namespace CoinSaver.Controllers
             var spendings = _db.GetSpendings(id);
 
             //filter by period
-            if(period != null && period.IsActive)
+            if (period != null && period.IsActive)
             {
                 DateTime startFormat = period.Start.Date;
                 DateTime endFormat = period.End.Date.AddDays(1).AddSeconds(-1);
                 spendings = spendings.Where(x => x.Date >= startFormat && x.Date <= endFormat);
+            }
+            else
+            {
+                period.Start = spendings.Min(x => x.Date);
+                period.End = DateTime.Now;
             }
 
             //calc stat model
             var totalSpend = spendings.Sum(x => x.Price);
             var calcStat = spendings
                         .GroupBy(x => x.Category)
-                        .ToDictionary(k => k.Key, e => new Models.StatVM.CountAndSumm
+                        .ToDictionary(k => k.Key, e =>
                         {
-                            Count = e.Count(),
-                            Summ = e.Sum(c => c.Price)
-                        });
-            var histPerc = new List<KeyValuePair<Models.PurchaseCategory, string>>
-                        (calcStat
-                            .Select(x => new KeyValuePair<Models.PurchaseCategory, string>(x.Key, ((x.Value.Summ + 0.0) / totalSpend * 100).ToString().Replace(',','.'))));
+                            var summ = e.Sum(c => c.Price);
+                            return new Models.StatVM.CatStat
+                            {
+                                Count = e.Count(),
+                                Summ = summ,
+                                HistPerc = ((summ + 0.0) / totalSpend * 100).ToString().Replace(',', '.')
+                            };
+                        }).OrderByDescending(o => o.Value.Summ);
             return View(
                 new Models.StatVM
                 {
@@ -56,7 +63,6 @@ namespace CoinSaver.Controllers
                     TotalPurchases = spendings.Count(),
                     TotalSpend = spendings.Sum(x => x.Price),
                     PurchasesByCategory = calcStat,
-                    HistogrammPercentage = histPerc,
                     Period = period
                 });
         }

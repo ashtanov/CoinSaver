@@ -3,23 +3,30 @@
     ViewData["Title"] = "Статистика";
 }
 
-<div class="panel panel-default row">
-    <div class="panel-heading">
-        @Html.Partial("PeriodFilter", new CoinSaver.Models.PeriodVM())
-    </div>
-</div>
+@*<div class="panel panel-default row">
+        <div class="panel-heading">
+            @Html.Partial("PeriodFilter", new CoinSaver.Models.PeriodVM())
+        </div>
+    </div>*@
 <div class="page-header">
     <div class="panel panel-default row">
         <div class="panel-heading">
             <h3 class="panel-title">
-                Общие траты для <strong>@Model.Name</strong>
+                Общие траты для <strong>@Model.Name</strong> за
                 @if (Model.Period != null && Model.Period.IsActive)
                 {
-                <span>за @Model.Period.Start.ToString("dd.MM.yy") - @Model.Period.End.ToString("dd.MM.yy")</span>
+                    <span>@Model.Period.Start.ToString("dd.MM.yy") - @Model.Period.End.ToString("dd.MM.yy")</span>
+                }
+                else
+                {
+                    <span>все время</span>
                 }
             </h3>
         </div>
         <div class="panel-body">
+            <div>
+                @Html.Partial("PeriodFilter", Model.Period)
+            </div>
             <div class="table-responsive ">
                 <table class="table table-bordered">
                     <tbody>
@@ -37,41 +44,40 @@
         </div>
     </div>
 </div>
-<div class="table-responsive">
-    <table class="table table-striped">
+<div class="table-hover">
+    <table class="table table-responsive">
         <tbody>
             <tr>
                 <th>Категория</th>
                 <th>Покупок</th>
                 <th>Потрачено</th>
+                <th></th>
             </tr>
-            @foreach (var kvp in Model.PurchasesByCategory)
-            {
-
-            <tr style="background-color: @kvp.Key.EnumColorFor()">
-                <td>@kvp.Key.EnumDisplayNameFor()</td>
-                <td>@kvp.Value.Count</td>
-                <td>@kvp.Value.Summ</td>
+            <tr>
+                <td style="width:5%">
+                    <button class="btn" style="font-size:110%;color:#000; background-color:#fff">Все</button>
+                </td>
+                <td style="width:5%">@Model.TotalPurchases</td>
+                <td style="width:5%">@Model.TotalSpend</td>
+                <td>
+                    <div class="progress">
+                        @foreach (var p in Model.PurchasesByCategory)
+                        {
+                            <div class="progress-bar" style="width: @p.Value.HistPerc%; background-color: @p.Key.EnumColorFor()" alt="@p.Key.EnumDisplayNameFor()"></div>
+                        }
+                    </div>
+                </td>
             </tr>
-            }
-        </tbody>
-    </table>
-</div>
-<div class="progress">
-    @foreach (var p in Model.HistogrammPercentage)
-    {
-    <div class="progress-bar" style="width: @p.Value%; background-color: @p.Key.EnumColorFor()"></div>
-    }
-</div>
-<div class="table-hover">
-    <table class="table table-condensed">
-        <tbody>
-            @foreach (var p in Model.HistogrammPercentage)
+            @foreach (var p in Model.PurchasesByCategory)
             {
                 <tr>
-                    <td style="width:30px">@p.Key.EnumDisplayNameFor()</td>
+                    <td style="width:5%">
+                        <button class="btn" style="font-size:110%;color:#000; background-color:@p.Key.EnumColorFor()">@p.Key.EnumDisplayNameFor()</button>
+                    </td>
+                    <td style="width:5%">@p.Value.Count</td>
+                    <td style="width:5%">@p.Value.Summ</td>
                     <td>
-                        <div class="progress" style="width: @p.Value%">
+                        <div class="progress" style="width: @p.Value.HistPerc%">
                             <div class="progress-bar" style="width: 100%; background-color: @p.Key.EnumColorFor()"></div>
                         </div>
                     </td>
@@ -80,7 +86,7 @@
         </tbody>
     </table>
 </div>
-<div>
+@*<div>
     <!-- Навигация -->
     <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#tab_All" aria-controls="tab_All" role="tab" data-toggle="tab">Все</a></li>
@@ -90,13 +96,13 @@
         }
     </ul>
     @*<a asp-action="Edit" asp-controller="Home" asp-route-area="Global" asp-route-id="" data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#tab_content"></a>*@
-    <!-- Содержимое вкладок -->
-    <div class="tab-content">
-        <div id="tab_content"></div>
-        <div role="tabpanel" class="tab-pane active" id="tab_All">Все</div>
-        @foreach (var p in Model.HistogrammPercentage)
-        {
-            <div role="tabpanel" class="tab-pane" id="tab_@p.Key">@p.Value</div>
-        }
-    </div>
-</div>
+<!-- Содержимое вкладок -->
+@*<div class="tab-content">
+            <div id="tab_content"></div>
+            <div role="tabpanel" class="tab-pane active" id="tab_All">Все</div>
+            @foreach (var p in Model.HistogrammPercentage)
+            {
+                <div role="tabpanel" class="tab-pane" id="tab_@p.Key">@p.Value</div>
+            }
+        </div>
+    </div>*@
