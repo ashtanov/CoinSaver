@@ -9,7 +9,7 @@ namespace CoinSaver.Models
     public class FileDB : IDataLayer
     {
         const string dbfilename = "db.fl";
-        Dictionary<string, List<Purchase>> _db;
+        public Dictionary<string, List<Purchase>> _db;
         public FileDB()
         {
             _db = new Dictionary<string, List<Purchase>>();

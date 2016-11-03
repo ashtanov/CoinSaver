@@ -1,18 +1,15 @@
 ﻿@model CoinSaver.Models.IndexViewModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Добавить покупку";
 }
 
-@if (Model != null)
-{
-    <div class="page-header">
-        @Html.Partial("AddSpending", new CoinSaver.Models.PurNameVM { Name = Model.Name })
-    </div>
-    <div class="row">
-        @Html.Partial("SpendingsTable", Model)
-    </div>
-}
-else
-{
-    @Html.Partial("EnterName", new CoinSaver.Models.EnteredNameVM());
+<div class="page-header">
+    @Html.Partial("AddSpending", new CoinSaver.Models.Purchase())
+</div>
+<div class="row">
+    @Html.Partial("SpendingsTable", Model)
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

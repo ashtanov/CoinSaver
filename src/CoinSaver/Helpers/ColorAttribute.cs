@@ -11,7 +11,7 @@ namespace CoinSaver
         public readonly string HexColor;
         public ColorAttribute(string hexColor)
         {
-            HexColor = hexColor; 
+            HexColor = hexColor;
         }
     }
 }

@@ -37,5 +37,11 @@ namespace CoinSaver
 
             return new HtmlString(item.ToString());
         }
+
+        public static bool IsInt(this string @this)
+        {
+            int y;
+            return !string.IsNullOrEmpty(@this) && int.TryParse(@this, out y);
+        }
     }
 }

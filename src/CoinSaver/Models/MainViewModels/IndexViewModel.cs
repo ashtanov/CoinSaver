@@ -10,6 +10,6 @@ namespace CoinSaver.Models
     {
         public string Name { get; set; }
 
-        public IEnumerable<Purchase> Purchases { get; set; } 
+        public IEnumerable<Purchase> Purchases { get; set; }
     }
 }

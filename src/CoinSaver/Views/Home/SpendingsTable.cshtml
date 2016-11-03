@@ -22,7 +22,7 @@
                     <td>@p.PurchaseName</td>
                     <td>@p.Price</td>
                     <td>@p.Date.ToString("dd.MM.yy")</td>
-                    <td>@p.Reason</td>
+                    <td>@p.Reason.EnumDisplayNameFor()</td>
                     <td style="background-color: @p.Category.EnumColorFor()">@p.Category.EnumDisplayNameFor()</td>
                 </tr>
                 i++;

@@ -3,29 +3,20 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace CoinSaver.Models
 {
     public class Purchase
     {
-        [Range(1, 99999999)]
+        [Range(1, 99999999, ErrorMessage = "Цена должа быть больше 1")]
         public int Price { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Введите название покупки")]
         public string PurchaseName { get; set; }
 
-        private string _reason;
+        public PurchaseReason Reason { get; set; }
 
-        public string Reason {
-            get
-            {
-                return _reason;
-            }
-            set
-            {
-                _reason = value?.Replace("\n", " ")?.Replace("\t", " ")?.Replace("@@@", " ");
-            }
-        }
         public DateTime Date { get; set; }
 
         public PurchaseCategory Category { get; set; }
@@ -42,9 +33,9 @@ namespace CoinSaver.Models
             {
                 Price = int.Parse(res[1]),
                 PurchaseName = res[0],
-                Reason = res[2],
-                Date = DateTime.Parse(res[3]),
-                Category = (PurchaseCategory)Enum.Parse(typeof(PurchaseCategory),res[4])
+                Reason = res[2].IsInt() ? (PurchaseReason)Enum.Parse(typeof(PurchaseReason), res[2]) : PurchaseReason.Need,
+                Date = DateTime.Parse(res[3], DateTimeFormatInfo.InvariantInfo),
+                Category = (PurchaseCategory)Enum.Parse(typeof(PurchaseCategory), res[4])
             };
         }
     }

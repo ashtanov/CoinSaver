@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoinSaver.Models
 {
-    public class PeriodVM
+    public class PeriodVM : IValidatableObject
     {
         public PeriodVM()
         {
@@ -23,5 +23,11 @@ namespace CoinSaver.Models
         [Display(Name = "Конец")]
         [DataType(DataType.Date)]
         public DateTime End { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (End < Start)
+                yield return new ValidationResult("Дата начала должна быть меньше даты конца");
+        }
     }
 }

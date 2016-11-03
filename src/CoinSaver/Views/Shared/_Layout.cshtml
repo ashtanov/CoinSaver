@@ -29,7 +29,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <ul>
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index" asp-route-id="@ViewData["Name"]" class="navbar-brand">CoinSaver для @ViewData["Name"]</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CoinSaver для @ViewData["Name"]</a></li>
                     </ul>
                     
                     
@@ -37,7 +37,9 @@
 
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a asp-action="Stat" asp-route-id="@ViewData["Name"]">Статистика</a></li>
+                        <li><a asp-action="Stat">Статистика</a></li>
+                        <li><a asp-action="LogOff" asp-controller="Account">Выход</a></li>
+                        
                     </ul>
                 </div>
             }

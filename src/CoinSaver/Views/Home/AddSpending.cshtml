@@ -1,4 +1,4 @@
-﻿@model CoinSaver.Models.PurNameVM
+﻿@model CoinSaver.Models.Purchase
 
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -6,11 +6,12 @@
     </div>
     <div class="panel-body">
         <form class="navbar-form" asp-action="Index">
-            <input asp-for="Name" hidden />
-            <input class="form-control" asp-for="Pur.PurchaseName" placeholder="Название" />
-            <input class="form-control" asp-for="Pur.Price" placeholder="Цена" />
-            <input class="form-control" asp-for="Pur.Reason" placeholder="Причина" />
-            <select class="form-control" asp-for="Pur.Category" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseCategory>()">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input class="form-control" asp-for="PurchaseName" placeholder="Название" />
+            <input class="form-control" asp-for="Price" placeholder="Цена" value=""/>
+            <select class="form-control" asp-for="Reason" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseReason>()">
+            </select>
+            <select class="form-control" asp-for="Category" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseCategory>()">
                 <option>Выберите категорию</option>
             </select>
             <button class="btn btn-success" type="submit">Добавить</button>

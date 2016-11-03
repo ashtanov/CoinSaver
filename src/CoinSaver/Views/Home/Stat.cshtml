@@ -3,16 +3,11 @@
     ViewData["Title"] = "Статистика";
 }
 
-@*<div class="panel panel-default row">
-        <div class="panel-heading">
-            @Html.Partial("PeriodFilter", new CoinSaver.Models.PeriodVM())
-        </div>
-    </div>*@
 <div class="page-header">
     <div class="panel panel-default row">
         <div class="panel-heading">
             <h3 class="panel-title">
-                Общие траты для <strong>@Model.Name</strong> за
+                <strong>@ViewData["Name"]</strong>, ваши траты за
                 @if (Model.Period != null && Model.Period.IsActive)
                 {
                     <span>@Model.Period.Start.ToString("dd.MM.yy") - @Model.Period.End.ToString("dd.MM.yy")</span>
@@ -44,6 +39,8 @@
         </div>
     </div>
 </div>
+@if (Model.PurchasesByCategory != null)
+{
 <div class="table-hover">
     <table class="table table-responsive">
         <tbody>
@@ -106,3 +103,13 @@
             }
         </div>
     </div>*@
+}
+else
+{
+    <h3>Пока анализировать нечего :(</h3>
+}
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

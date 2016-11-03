@@ -10,38 +10,38 @@ namespace CoinSaver.Models
     {
         [Color("#cfcfd1")]
         [Display(Name = "Другое")]
-        Other,
+        Other = 0,
 
         [Color("#d8a245")]
         [Display(Name = "Кафе и рестораны")]
-        Cafe,
+        Cafe = 1,
 
         [Color("#3bafe5")]
         [Display(Name = "Гипермаркет")]
-        Shop,
+        Shop = 2,
 
         [Color("#62d68b")]
         [Display(Name = "Аптека")]
-        Medicine,
+        Medicine = 3,
 
         [Color("#d1d11f")]
         [Display(Name = "Городской транспорт")]
-        Transport,
+        Transport = 4,
 
         [Color("#bc79e5")]
         [Display(Name = "Одежда и обувь")]
-        Clothes,
+        Clothes = 5,
 
         [Color("#f92525")]
         [Display(Name = "Развлечения")]
-        Entertainments,
+        Entertainments = 6,
 
         [Color("#97ea07")]
         [Display(Name = "Путешествия")]
-        Travels,
+        Travels = 7,
 
         [Color("#f271a9")]
         [Display(Name = "Красота и здоровье")]
-        Beauty
+        Beauty = 8
     }
 }

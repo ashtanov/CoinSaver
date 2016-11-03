@@ -5,7 +5,6 @@
         <div class="btn-group">
             <form class="form-inline" asp-action="Stat" method="get">
                 <input hidden name="IsActive" checked="checked" value="true">
-                <input hidden id="Name" value="@ViewData["Name"]" />
                 <div class="form-group">
                     <label >Период:</label>
                     <input class="form-control" placeholder="Начало" asp-for="Start" />
@@ -20,7 +19,6 @@
         <div class="btn-group">
             <form class="form-inline" asp-action="Stat">
                 <input hidden name="IsActive" value="false">
-                <input hidden id="Name" value="@ViewData["Name"]" />
                 <button class="btn btn-success" type="submit">Сбросить</button>
             </form>
         </div>
