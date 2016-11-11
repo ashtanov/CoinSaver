@@ -29,17 +29,19 @@
                         <span class="icon-bar"></span>
                     </button>
                     <ul>
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CoinSaver для @ViewData["Name"]</a></li>
-                    </ul>
-                    
-                    
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CoinSaver</a></li>
+                    </ul>   
                 </div>
 
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
+                        <li class="active" ><a class="btn btn-danger btn-lg" href="#">@ViewData["Name"]</a></li>
+                        <li><a asp-action="Index">Добавить</a></li>
                         <li><a asp-action="Stat">Статистика</a></li>
-                        <li><a asp-action="LogOff" asp-controller="Account">Выход</a></li>
                         
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a asp-action="LogOff" asp-controller="Account">Выход</a></li>
                     </ul>
                 </div>
             }
@@ -74,7 +76,7 @@
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
         </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
 
     @RenderSection("scripts", required: false)

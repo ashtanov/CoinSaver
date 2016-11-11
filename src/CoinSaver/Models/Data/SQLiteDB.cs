@@ -28,7 +28,7 @@ namespace CoinSaver.Models
 
         }
 
-        public IEnumerable<Purchase> GetUserSpendings(CSUser user)
+        public IQueryable<Purchase> GetUserSpendings(CSUser user)
         {
             return Purchases.Where(x => x.UserID == user.Id).Select(x => x.ToPurchase());
         }

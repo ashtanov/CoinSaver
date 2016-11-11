@@ -41,68 +41,78 @@
 </div>
 @if (Model.PurchasesByCategory != null)
 {
-<div class="table-hover">
-    <table class="table table-responsive">
-        <tbody>
-            <tr>
-                <th>Категория</th>
-                <th>Покупок</th>
-                <th>Потрачено</th>
-                <th></th>
-            </tr>
-            <tr>
-                <td style="width:5%">
-                    <button class="btn" style="font-size:110%;color:#000; background-color:#fff">Все</button>
-                </td>
-                <td style="width:5%">@Model.TotalPurchases</td>
-                <td style="width:5%">@Model.TotalSpend</td>
-                <td>
-                    <div class="progress">
-                        @foreach (var p in Model.PurchasesByCategory)
-                        {
-                            <div class="progress-bar" style="width: @p.Value.HistPerc%; background-color: @p.Key.EnumColorFor()" alt="@p.Key.EnumDisplayNameFor()"></div>
-                        }
-                    </div>
-                </td>
-            </tr>
-            @foreach (var p in Model.PurchasesByCategory)
-            {
+
+    <div class="table-hover row">
+        <table class="table table-responsive">
+            <tbody>
+                <tr>
+                    <th>Категория</th>
+                    <th>Покупок</th>
+                    <th>Потрачено</th>
+                    <th></th>
+                </tr>
                 <tr>
                     <td style="width:5%">
-                        <button class="btn" style="font-size:110%;color:#000; background-color:@p.Key.EnumColorFor()">@p.Key.EnumDisplayNameFor()</button>
+                        <button class="btn" style="font-size:110%;color:#000; background-color:#fff" onclick="getHistoryFor('All','Все')">
+                            Все
+                        </button>
                     </td>
-                    <td style="width:5%">@p.Value.Count</td>
-                    <td style="width:5%">@p.Value.Summ</td>
+                    <td style="width:5%">@Model.TotalPurchases</td>
+                    <td style="width:5%">@Model.TotalSpend</td>
                     <td>
-                        <div class="progress" style="width: @p.Value.HistPerc%">
-                            <div class="progress-bar" style="width: 100%; background-color: @p.Key.EnumColorFor()"></div>
+                        <div class="progress">
+                            @foreach (var p in Model.PurchasesByCategory)
+                            {
+                                <div class="progress-bar @p.Key-clr" style="width: @p.Value.HistPerc%;" alt="@p.Key.EnumDisplayNameFor()"></div>
+                            }
                         </div>
                     </td>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
-@*<div>
-    <!-- Навигация -->
-    <ul class="nav nav-tabs" role="tablist">
-        <li class="active"><a href="#tab_All" aria-controls="tab_All" role="tab" data-toggle="tab">Все</a></li>
-        @foreach (var p in Model.HistogrammPercentage)
-        {
-            <li><a style="background-color: @p.Key.EnumColorFor()" href="#tab_@p.Key" aria-controls="tab_@p.Key" role="tab" data-toggle="tab">@p.Key.EnumDisplayNameFor()</a></li>
-        }
-    </ul>
-    @*<a asp-action="Edit" asp-controller="Home" asp-route-area="Global" asp-route-id="" data-ajax="true" data-ajax-method="GET" data-ajax-mode="replace" data-ajax-update="#tab_content"></a>*@
-<!-- Содержимое вкладок -->
-@*<div class="tab-content">
-            <div id="tab_content"></div>
-            <div role="tabpanel" class="tab-pane active" id="tab_All">Все</div>
-            @foreach (var p in Model.HistogrammPercentage)
-            {
-                <div role="tabpanel" class="tab-pane" id="tab_@p.Key">@p.Value</div>
-            }
+                @foreach (var p in Model.PurchasesByCategory)
+                {
+                    <tr>
+                        <td style="width:5%">
+                            <button class="btn @p.Key-clr" style="font-size:110%;color:#000;" onclick="getHistoryFor('@p.Key','@p.Key.EnumDisplayNameFor()')">
+                                @p.Key.EnumDisplayNameFor()
+                            </button>
+                        </td>
+                        <td style="width:5%">@p.Value.Count</td>
+                        <td style="width:5%">@p.Value.Summ</td>
+                        <td>
+                            <div class="progress" style="width: @p.Value.HistPerc%">
+                                <div class="progress-bar @p.Key-clr" style="width: 100%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="panel panel-default row">
+
+        <div class="panel-heading">
+            <div id="historyHeader">
+                <div class="dropdown panel-title">
+                    <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                        <span id="currentCat">История покупок</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:void(0);" onclick="getHistoryFor('All','Все')">Все</a></li>
+                        @foreach (var p in Model.PurchasesByCategory)
+                        {
+                            var name = p.Key.EnumDisplayNameFor();
+                            <li><a class="@p.Key-clr" href="javascript:void(0);" onclick="getHistoryFor('@p.Key','@name')">@name</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>*@
+        <div class="panel-body">
+            <div id="purchaseHistory"></div>
+        </div>
+    </div>
 }
 else
 {

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using CoinSaver.Models;
 using Microsoft.AspNetCore.Authorization;
+using CoinSaver.Models.MainViewModels;
 
 namespace CoinSaver.Controllers
 {
@@ -23,45 +24,7 @@ namespace CoinSaver.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _dbContext = new CoinSaverContext();
-            MigrateFromOldDb();
 
-        }
-
-        bool processed = false;
-        public void MigrateFromOldDb()
-        {
-            if (!processed)
-            {
-                var oldbase = new FileDB();
-                foreach (var i in oldbase._db)
-                {
-                    CSUser usr = _userManager.Users.Where(x => x.NormalizedUserName == i.Key.ToUpper())?.FirstOrDefault();
-                    if (usr != null)
-                    {
-                        var t = _dbContext.GetUserSpendings(usr);
-                        foreach (var oldItem in i.Value)
-                        {
-                            if (!t.Any(x => x.Date == oldItem.Date && x.PurchaseName == oldItem.PurchaseName))
-                            {
-                                _dbContext.Add(
-                                    new CSPurchase
-                                    {
-                                        Date = oldItem.Date,
-                                        Category = oldItem.Category,
-                                        Name = oldItem.PurchaseName,
-                                        Price = oldItem.Price,
-                                        Reason = PurchaseReason.Need,
-                                        UserID = usr.Id
-                                    });
-                            }
-                        }
-
-                    }
-
-                }
-                _dbContext.SaveChanges();
-            }
-            processed = true;
         }
 
         [Authorize]
@@ -145,7 +108,7 @@ namespace CoinSaver.Controllers
         public async Task<IActionResult> Index(Purchase spending)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (spending != null && ModelState.IsValid)
+            if (spending != null && ModelState.IsValid && user != null)
             {
                 spending.Date = DateTime.Now;
                 _dbContext.Purchases.Add(
@@ -162,6 +125,31 @@ namespace CoinSaver.Controllers
 
             }
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> GetHistoryTable(HistorySettingsVM hvm)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+                return new StatusCodeResult(403);
+            var table = _dbContext.GetUserSpendings(user);
+
+            DateTime start, end;
+            if (DateTime.TryParse(hvm.StartDate, out start) && DateTime.TryParse(hvm.EndDate, out end))
+            {
+                DateTime startFormat = start.Date;
+                DateTime endFormat = end.AddDays(1).AddSeconds(-1);
+                table = table.Where(x => x.Date >= startFormat && x.Date <= endFormat);
+            }
+            PurchaseCategory currCat;
+            if (Enum.TryParse(hvm.Category, out currCat))
+                table = table.Where(x => x.Category == currCat);
+            else if (hvm.Category != "All")
+                return new StatusCodeResult(500);
+
+            return PartialView("SpendingsTable", table);
         }
 
         public IActionResult Error()
