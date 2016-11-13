@@ -38,6 +38,13 @@ namespace CoinSaver
             return new HtmlString(item.ToString());
         }
 
+        public static IQueryable<Models.Purchase> WhereDateBetween(this IQueryable<Models.Purchase> @this, DateTime start, DateTime end)
+        {
+            DateTime startFormat = start.Date;
+            DateTime endFormat = end.AddDays(1).AddSeconds(-1);
+            return @this.Where(x => x.Date >= startFormat && x.Date <= endFormat);
+        }
+
         public static bool IsInt(this string @this)
         {
             int y;

@@ -40,11 +40,7 @@ namespace CoinSaver.Controllers
             {
                 //filter by period
                 if (period != null && period.IsActive)
-                {
-                    DateTime startFormat = period.Start.Date;
-                    DateTime endFormat = period.End.Date.AddDays(1).AddSeconds(-1);
-                    spendings = spendings.Where(x => x.Date >= startFormat && x.Date <= endFormat);
-                }
+                    spendings = spendings.WhereDateBetween(period.Start, period.End);
                 else
                 {
                     period.Start = spendings.Min(x => x.Date);
@@ -98,7 +94,7 @@ namespace CoinSaver.Controllers
             return View(new IndexViewModel
             {
                 Name = user.UserName,
-                Purchases = _dbContext.GetUserSpendings(user)
+                Purchases = _dbContext.GetUserSpendings(user).OrderByDescending(x => x.Date).Take(20)
             });
         }
 
@@ -138,11 +134,7 @@ namespace CoinSaver.Controllers
 
             DateTime start, end;
             if (DateTime.TryParse(hvm.StartDate, out start) && DateTime.TryParse(hvm.EndDate, out end))
-            {
-                DateTime startFormat = start.Date;
-                DateTime endFormat = end.AddDays(1).AddSeconds(-1);
-                table = table.Where(x => x.Date >= startFormat && x.Date <= endFormat);
-            }
+                table = table.WhereDateBetween(start, end);
             PurchaseCategory currCat;
             if (Enum.TryParse(hvm.Category, out currCat))
                 table = table.Where(x => x.Category == currCat);

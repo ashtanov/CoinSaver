@@ -9,13 +9,10 @@ function setPeriod() {
     if (pStart !== null && pEnd !== null) {
         datestart = pStart.value;
         dateend = pEnd.value;
-    }    
+    }
 }
 
 function getHistoryFor(cat, catName) {
-
-    document.getElementById("currentCat").textContent = catName;
-    document.getElementById("historyHeader").classList = cat + '-clr';
     $.post(
         'GetHistoryTable',
         {
@@ -25,5 +22,8 @@ function getHistoryFor(cat, catName) {
         }).success(
         function (data) {
             $('#purchaseHistory').html(data);
+            document.getElementById("currentCat").textContent = catName;
+            document.getElementById("historyHeader").classList = cat + '-clr';
+            location.hash = "#history";
         });
 }
