@@ -9,16 +9,18 @@ namespace CoinSaver.Models
 {
     public class Purchase
     {
-        [Range(1, 99999999, ErrorMessage = "Цена должа быть больше 1")]
+        [Range(1, int.MaxValue, ErrorMessage = "Цена должа быть больше 1")]
+        [Required(ErrorMessage = "Укажите цену")]
         public int Price { get; set; }
 
-        [Required(ErrorMessage = "Введите название покупки")]
+        [Required(ErrorMessage = "Укажите название покупки")]
         public string PurchaseName { get; set; }
 
         public PurchaseReason Reason { get; set; }
 
         public DateTime Date { get; set; }
 
+        [Range(0, int.MaxValue, ErrorMessage = "Укажите категорию")]
         public PurchaseCategory Category { get; set; }
 
         public override string ToString()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoinSaver.Models.MainViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace CoinSaver.Models
     {
         public string Name { get; set; }
 
-        public IEnumerable<Purchase> Purchases { get; set; }
+        public PurchasesTableVM PurchasesTable { get; set; }
     }
 }

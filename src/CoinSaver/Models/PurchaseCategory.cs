@@ -8,6 +8,9 @@ namespace CoinSaver.Models
 {
     public enum PurchaseCategory
     {
+        [Display(Name = "Выберите категорию")]
+        NotSelected = -1,
+
         [Display(Name = "Другое")]
         Other = 0,
 

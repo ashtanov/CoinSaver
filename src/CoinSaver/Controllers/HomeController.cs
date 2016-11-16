@@ -91,10 +91,15 @@ namespace CoinSaver.Controllers
             if (user == null)
                 return RedirectToAction("Login", "Account", new { });
             ViewData["Name"] = user.RealName ?? user.UserName;
+            var tableVm = new PurchasesTableVM
+            {
+                ShowCategoryColumn = true,
+                Purchases = _dbContext.GetUserSpendings(user).OrderByDescending(x => x.Date).Take(20).ToList()
+            };
             return View(new IndexViewModel
             {
                 Name = user.UserName,
-                Purchases = _dbContext.GetUserSpendings(user).OrderByDescending(x => x.Date).Take(20)
+                PurchasesTable = tableVm
             });
         }
 
@@ -131,17 +136,22 @@ namespace CoinSaver.Controllers
             if (user == null)
                 return new StatusCodeResult(403);
             var table = _dbContext.GetUserSpendings(user);
+            var tableVM = new PurchasesTableVM { ShowCategoryColumn = false };
 
             DateTime start, end;
             if (DateTime.TryParse(hvm.StartDate, out start) && DateTime.TryParse(hvm.EndDate, out end))
                 table = table.WhereDateBetween(start, end);
+
             PurchaseCategory currCat;
             if (Enum.TryParse(hvm.Category, out currCat))
                 table = table.Where(x => x.Category == currCat);
             else if (hvm.Category != "All")
                 return new StatusCodeResult(500);
+            else
+                tableVM.ShowCategoryColumn = true;
+            tableVM.Purchases = table.ToList();
 
-            return PartialView("SpendingsTable", table);
+            return PartialView("SpendingsTable", tableVM);
         }
 
         public IActionResult Error()

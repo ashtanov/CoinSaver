@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CoinSaver
 {
@@ -49,6 +50,26 @@ namespace CoinSaver
         {
             int y;
             return !string.IsNullOrEmpty(@this) && int.TryParse(@this, out y);
+        }
+
+        /// <summary>
+        /// Order by value as int, disables first element and mark it as selected
+        /// </summary>
+        /// <typeparam name="TEnum"></typeparam>
+        /// <param name="this"></param>
+        /// <returns></returns>
+        public static IEnumerable<SelectListItem> GetEnumSelectListIntValues<TEnum>(this IHtmlHelper @this) where TEnum : struct
+        {
+            var res = @this.GetEnumSelectList<TEnum>().OrderBy(x => int.Parse(x.Value));
+            if (res.Any()) {
+                res.First().Selected = true;
+                foreach (var e in res.Skip(1))
+                {
+                    e.Selected = false;
+                }
+            }
+            return res;
+
         }
     }
 }

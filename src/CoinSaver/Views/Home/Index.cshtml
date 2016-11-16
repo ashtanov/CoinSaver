@@ -7,9 +7,8 @@
     @Html.Partial("AddSpending", new CoinSaver.Models.Purchase())
 </div>
 <div class="row">
-    @{ var exec = @Model.Purchases.ToList(); }
-    <p>Последние @exec.Count покупок:</p>
-    @Html.Partial("SpendingsTable", exec)
+    <p>Последние @Model.PurchasesTable.Purchases.Count покупок:</p>
+    @Html.Partial("SpendingsTable", @Model.PurchasesTable)
 </div>
 
 @section Scripts {

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CoinSaver.Models.Purchase>
+﻿@model CoinSaver.Models.MainViewModels.PurchasesTableVM
 <div class="table-responsive">
     <table class="table table-hover">
         <thead>
@@ -8,14 +8,17 @@
                 <th>Цена</th>
                 <th>Дата</th>
                 <th>Причина</th>
-                <th>Категория</th>
+                @if (Model.ShowCategoryColumn)
+                {
+                    <th>Категория</th>
+                }
             </tr>
         </thead>
         <tbody>
             @{
                 int i = 1;
             }
-            @foreach (var p in Model.OrderByDescending(x => x.Date))
+            @foreach (var p in Model.Purchases.OrderByDescending(x => x.Date))
             {
                 <tr>
                     <td>@i</td>
@@ -23,7 +26,10 @@
                     <td>@p.Price</td>
                     <td>@p.Date.ToString("dd.MM.yy")</td>
                     <td>@p.Reason.EnumDisplayNameFor()</td>
-                    <td class="@p.Category-clr">@p.Category.EnumDisplayNameFor()</td>
+                    @if (Model.ShowCategoryColumn)
+                    {
+                        <td class="@p.Category-clr">@p.Category.EnumDisplayNameFor()</td>
+                    }
                 </tr>
                 i++;
             }

@@ -1,4 +1,5 @@
-﻿@model CoinSaver.Models.Purchase
+﻿@using CoinSaver
+@model CoinSaver.Models.Purchase
 
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -8,14 +9,23 @@
         <form class="navbar-form" asp-action="Index">
             <div asp-validation-summary="All" class="text-danger"></div>
             <input class="form-control" asp-for="PurchaseName" placeholder="Название" />
-            <input class="form-control" asp-for="Price" placeholder="Цена" value=""/>
-            <select class="form-control" asp-for="Reason" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseReason>()">
-            </select>
-            <select class="form-control" asp-for="Category" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseCategory>()">
-                <option>Выберите категорию</option>
+            <input class="form-control" asp-for="Price" placeholder="Цена" value="" />
+            <select class="form-control" asp-for="Reason" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseReason>()"></select>
+            <select class="form-control" data-val="true" data-val-range="Укажите категорию" data-val-range-min="0" name="Category" id="Category">
+                @foreach (var el in @Html.GetEnumSelectListIntValues<CoinSaver.Models.PurchaseCategory>())
+                {
+
+                    if (el.Selected)
+                    {
+                        <option value="@el.Value" selected="selected">@el.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@el.Value">@el.Text</option>
+                    }
+                }
             </select>
             <button class="btn btn-success" type="submit">Добавить</button>
         </form>
     </div>
 </div>
-
