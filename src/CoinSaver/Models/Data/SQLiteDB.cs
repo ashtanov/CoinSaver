@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CoinSaver.Models
 {
-    public class CoinSaverContext : IdentityDbContext<CSUser>
+    public class CoinSaverContext : IdentityDbContext<CSUser, CSRole, string>
     {
         public DbSet<CSPurchase> Purchases { get; set; }
 

@@ -8,13 +8,13 @@ using CoinSaver.Models;
 namespace CoinSaver.Migrations
 {
     [DbContext(typeof(CoinSaverContext))]
-    [Migration("20161103105304_AddRealName")]
-    partial class AddRealName
+    [Migration("20161117125814_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.0-preview1-22509");
+                .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
 
             modelBuilder.Entity("CoinSaver.Models.CSPurchase", b =>
                 {
@@ -109,6 +109,7 @@ namespace CoinSaver.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
+                        .IsUnique()
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");

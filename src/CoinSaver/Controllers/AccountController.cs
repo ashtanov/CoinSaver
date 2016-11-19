@@ -19,15 +19,18 @@ namespace IdentityTest.Controllers
     {
         private readonly UserManager<CSUser> _userManager;
         private readonly SignInManager<CSUser> _signInManager;
+        private readonly RoleManager<CSRole> _roleManager;
         private readonly ILogger _logger;
 
         public AccountController(
             UserManager<CSUser> userManager,
             SignInManager<CSUser> signInManager,
+            RoleManager<CSRole> roleManager,
             ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
@@ -95,7 +98,10 @@ namespace IdentityTest.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "User created a new account with password.");
+                    await _userManager.AddToRoleAsync(user, "User");
+                    if(user.UserName == "Admin")
+                        await _userManager.AddToRoleAsync(user, "Administrator");
+                    _logger.LogInformation(3, "User created a new account with password. Set role user/");
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);

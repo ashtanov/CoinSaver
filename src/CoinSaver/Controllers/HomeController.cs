@@ -14,17 +14,78 @@ namespace CoinSaver.Controllers
     {
         private readonly UserManager<CSUser> _userManager;
         private readonly SignInManager<CSUser> _signInManager;
+        private readonly RoleManager<CSRole> _roleManager;
         private readonly CoinSaverContext _dbContext;
 
         public HomeController(
             UserManager<CSUser> userManager,
-            SignInManager<CSUser> signInManager
+            SignInManager<CSUser> signInManager,
+            RoleManager<CSRole> roleManager
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _dbContext = new CoinSaverContext();
 
+        }
+
+        [Authorize(Roles ="Administrator")] //TODO: requests GetHistoryTable with username too
+        public async Task<IActionResult> UserStat(PeriodVM period, string username)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+                return RedirectToAction("Error");
+            ViewData["Name"] = user.RealName ?? user.UserName;
+            var expUser =  username == null ? user : _userManager.Users.FirstOrDefault(x => x.NormalizedUserName == username.ToUpper());
+            var spendings = _dbContext.GetUserSpendings(expUser);
+
+            if (spendings.Any())
+            {
+                //filter by period
+                if (period != null && period.IsActive)
+                    spendings = spendings.WhereDateBetween(period.Start, period.End);
+                else
+                {
+                    period.Start = spendings.Min(x => x.Date);
+                    period.End = DateTime.Now;
+                }
+
+
+                //calc stat model
+                var totalSpend = spendings.Sum(x => x.Price);
+                var calcStat = spendings
+                            .GroupBy(x => x.Category)
+                            .ToDictionary(k => k.Key, e =>
+                            {
+                                var summ = e.Sum(c => c.Price);
+                                return new StatVM.CatStat
+                                {
+                                    Count = e.Count(),
+                                    Summ = summ,
+                                    HistPerc = ((summ + 0.0) / totalSpend * 100).ToString().Replace(',', '.')
+                                };
+                            }).OrderByDescending(o => o.Value.Summ);
+                return View("Stat",
+                    new StatVM
+                    {
+                        Name = user.UserName,
+                        TotalPurchases = spendings.Count(),
+                        TotalSpend = spendings.Sum(x => x.Price),
+                        PurchasesByCategory = calcStat,
+                        Period = period
+                    });
+            }
+            else
+                return View("Stat",
+                    new StatVM
+                    {
+                        Name = user.UserName,
+                        TotalPurchases = 0,
+                        TotalSpend = 0,
+                        PurchasesByCategory = null,
+                        Period = period
+                    });
         }
 
         [Authorize]
@@ -88,6 +149,7 @@ namespace CoinSaver.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
+            var tt = _userManager.GetRolesAsync(user).Result;
             if (user == null)
                 return RedirectToAction("Login", "Account", new { });
             ViewData["Name"] = user.RealName ?? user.UserName;

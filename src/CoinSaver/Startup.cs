@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace CoinSaver
 {
@@ -35,7 +36,7 @@ namespace CoinSaver
             services.AddMvc();
             services.AddEntityFrameworkSqlite().AddDbContext<Models.CoinSaverContext>();
             //services.AddSingleton<Models.IDataLayer, Models.FileDB>();
-            services.AddIdentity<Models.CSUser, IdentityRole>()
+            services.AddIdentity<Models.CSUser, Models.CSRole>()
                 .AddEntityFrameworkStores<Models.CoinSaverContext>()
                 .AddDefaultTokenProviders();
             services.Configure<IdentityOptions>(options =>
@@ -56,6 +57,7 @@ namespace CoinSaver
                 // User settings
                 options.User.RequireUniqueEmail = false;
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,6 +85,7 @@ namespace CoinSaver
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            Models.Data.Initalize.Run(app.ApplicationServices);
         }
     }
 }
