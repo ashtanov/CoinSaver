@@ -1,31 +1,54 @@
 ﻿@using CoinSaver
 @model CoinSaver.Models.Purchase
 
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3 class="panel-title">Добавить покупку</h3>
-    </div>
-    <div class="panel-body">
-        <form class="navbar-form" asp-action="Index">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <input class="form-control" asp-for="PurchaseName" placeholder="Название" />
-            <input class="form-control" asp-for="Price" placeholder="Цена" value="" />
-            <select class="form-control" asp-for="Reason" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseReason>()"></select>
-            <select class="form-control" data-val="true" data-val-range="Укажите категорию" data-val-range-min="0" name="Category" id="Category">
-                @foreach (var el in @Html.GetEnumSelectListIntValues<CoinSaver.Models.PurchaseCategory>())
-                {
 
-                    if (el.Selected)
-                    {
-                        <option value="@el.Value" selected="selected">@el.Text</option>
-                    }
-                    else
-                    {
-                        <option value="@el.Value">@el.Text</option>
-                    }
-                }
-            </select>
-            <button class="btn btn-success" type="submit">Добавить</button>
-        </form>
+<div class="panel panel-default">
+    @*<div class="panel-heading">*@
+        <ul class="nav nav-tabs">
+            <li class="panel-title">Добавить</li>
+            <li class="panel-title"><a class="alert-danger" href="#spending" data-toggle="tab">Покупку</a></li>
+            <li class="panel-title "><a class="alert-success" href="#supply" data-toggle="tab">Поступление</a></li>
+        </ul>
+    @*</div>*@
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="spending">
+            <div class="panel-body alert-danger">
+                <form class="navbar-form" asp-action="Index">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <input class="form-control" asp-for="PurchaseName" placeholder="Название" />
+                    <input class="form-control" asp-for="Price" placeholder="Цена" value="" />
+                    <select class="form-control" asp-for="Reason" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseReason>()"></select>
+                    <select class="form-control" data-val="true" data-val-range="Укажите категорию" data-val-range-min="0" name="Category" id="Category">
+                        @foreach (var el in @Html.GetEnumSelectListIntValues<CoinSaver.Models.PurchaseCategory>())
+                        {
+
+                            if (el.Selected)
+                            {
+                                <option value="@el.Value" selected="selected">@el.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@el.Value">@el.Text</option>
+                            }
+                        }
+                    </select>
+                    <button class="btn btn-success" type="submit">Добавить</button>
+                </form>
+            </div>
+        </div>
+        <div class="tab-pane" id="supply">
+            <div class="panel-body alert-success">
+                <form class="navbar-form" asp-action="Index">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <input class="form-control" asp-for="PurchaseName" placeholder="Название" />
+                    <input class="form-control" asp-for="Price" placeholder="Величина" value="" />
+                    <button class="btn btn-success" type="submit">Добавить</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+
+
+
