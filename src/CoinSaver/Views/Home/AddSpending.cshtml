@@ -1,16 +1,11 @@
 ﻿@using CoinSaver
 @model CoinSaver.Models.Purchase
 
-
 <div class="panel panel-default">
-    @*<div class="panel-heading">*@
         <ul class="nav nav-tabs">
-            <li class="panel-title">Добавить</li>
-            <li class="panel-title"><a class="alert-danger" href="#spending" data-toggle="tab">Покупку</a></li>
-            <li class="panel-title "><a class="alert-success" href="#supply" data-toggle="tab">Поступление</a></li>
+            <li class="panel-title bigTab"><a id ="spendingTitle" class="alert-danger" href="#spending" data-toggle="tab">Покупку</a></li>
+            <li class="panel-title bigTab"><a id ="supplyTitle" class="alert-success" href="#supply" data-toggle="tab">Поступление</a></li>
         </ul>
-    @*</div>*@
-
     <div class="tab-content">
         <div class="tab-pane active" id="spending">
             <div class="panel-body alert-danger">

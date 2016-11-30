@@ -125,3 +125,41 @@ body {
 .All-clr {
     background-color: #fff;
 }
+
+.nav-tabs > li > p {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+    margin: 0 0 0;
+}
+
+.nav > li > p {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+
+#spendingTitle {
+    color: #555;
+    background-color: #f2dede;
+    cursor: default;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+
+#supplyTitle {
+    color: #555;
+    background-color: #dff0d8;
+    cursor: default;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+
+.bigTab{
+    width: 50%;
+}
+
+
+
+

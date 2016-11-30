@@ -3,6 +3,13 @@ window.onload = setPeriod;
 var datestart;
 var dateend;
 
+$(document).ready(function () {
+    $("#tabHeaders a").click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+});
+
 function setPeriod() {
     var pStart = document.getElementById("perStart");
     var pEnd = document.getElementById("perEnd");
@@ -27,3 +34,7 @@ function getHistoryFor(cat, catName) {
             location.hash = "#history";
         });
 }
+
+function activaTab(tab) {
+    $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+};

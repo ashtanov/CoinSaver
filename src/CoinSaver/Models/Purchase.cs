@@ -9,7 +9,7 @@ namespace CoinSaver.Models
 {
     public class Purchase
     {
-        [Range(1, int.MaxValue, ErrorMessage = "Цена должа быть больше 1")]
+        [Range(1, int.MaxValue, ErrorMessage = "Цена должна быть больше 1")]
         [Required(ErrorMessage = "Укажите цену")]
         public int Price { get; set; }
 
