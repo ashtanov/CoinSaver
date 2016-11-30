@@ -4,7 +4,7 @@
 }
 <h1>@ViewData["Title"]</h1>
 <div class="page-header">
-    @Html.Partial("AddSpending", new CoinSaver.Models.Purchase())
+    @Html.Partial("AddRecord", new CoinSaver.Models.MainViewModels.PurchaseSupplyVM())
 </div>
 <div class="row">
     <p>Последние @Model.PurchasesTable.Purchases.Count покупок:</p>

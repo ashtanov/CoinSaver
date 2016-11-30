@@ -23,7 +23,7 @@
                 <tr>
                     <td>@i</td>
                     <td>@p.PurchaseName</td>
-                    <td>@p.Price</td>
+                    <td class="alert-danger">@p.Price</td>
                     <td>@p.Date.ToString("dd.MM.yy")</td>
                     <td>@p.Reason.EnumDisplayNameFor()</td>
                     @if (Model.ShowCategoryColumn)

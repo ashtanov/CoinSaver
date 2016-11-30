@@ -1,5 +1,5 @@
 ﻿@using CoinSaver
-@model CoinSaver.Models.Purchase
+@model CoinSaver.Models.MainViewModels.PurchaseSupplyVM
 
 <div class="panel panel-default">
         <ul class="nav nav-tabs">
@@ -9,12 +9,12 @@
     <div class="tab-content">
         <div class="tab-pane active" id="spending">
             <div class="panel-body alert-danger">
-                <form class="navbar-form" asp-action="Index">
+                <form class="navbar-form" asp-action="AddPurchase">
                     <div asp-validation-summary="All" class="text-danger"></div>
-                    <input class="form-control" asp-for="PurchaseName" placeholder="Название" />
-                    <input class="form-control" asp-for="Price" placeholder="Цена" value="" />
-                    <select class="form-control" asp-for="Reason" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseReason>()"></select>
-                    <select class="form-control" data-val="true" data-val-range="Укажите категорию" data-val-range-min="0" name="Category" id="Category">
+                    <input class="form-control" asp-for="Purchase.PurchaseName" placeholder="Название" />
+                    <input class="form-control" asp-for="Purchase.Price" placeholder="Цена" value="" />
+                    <select class="form-control" asp-for="Purchase.Reason" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseReason>()"></select>
+                    <select class="form-control" data-val="true" data-val-range="Укажите категорию" data-val-range-min="0" name="Purchase.Category" id="Purchase_Category">
                         @foreach (var el in @Html.GetEnumSelectListIntValues<CoinSaver.Models.PurchaseCategory>())
                         {
 
@@ -34,10 +34,10 @@
         </div>
         <div class="tab-pane" id="supply">
             <div class="panel-body alert-success">
-                <form class="navbar-form" asp-action="Index">
+                <form class="navbar-form" asp-action="AddSupply">
                     <div asp-validation-summary="All" class="text-danger"></div>
-                    <input class="form-control" asp-for="PurchaseName" placeholder="Название" />
-                    <input class="form-control" asp-for="Price" placeholder="Величина" value="" />
+                    <input class="form-control" asp-for="Supply.SupplyName" placeholder="Название" />
+                    <input class="form-control" asp-for="Supply.Value" placeholder="Величина" value="" />
                     <button class="btn btn-success" type="submit">Добавить</button>
                 </form>
             </div>

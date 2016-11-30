@@ -168,22 +168,46 @@ namespace CoinSaver.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(Purchase spending)
+        public async Task<IActionResult> AddPurchase(Purchase purchase)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (spending != null && ModelState.IsValid && user != null)
+            if (purchase != null && ModelState.IsValid && user != null)
             {
-                spending.Date = DateTime.Now;
+                purchase.Date = DateTime.Now;
                 _dbContext.Purchases.Add(
                     new CSPurchase
                     {
                         UserID = user.Id,
-                        Category = spending.Category,
-                        Date = spending.Date,
-                        Name = spending.PurchaseName,
-                        Price = spending.Price,
-                        Reason = spending.Reason
+                        Category = purchase.Category,
+                        Date = purchase.Date,
+                        Name = purchase.PurchaseName,
+                        Price = purchase.Price,
+                        Reason = purchase.Reason
                     });
+                await _dbContext.SaveChangesAsync();
+            }
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddSupply(Supply supply)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (supply != null && ModelState.IsValid && user != null)
+            {
+                //supply.Date = DateTime.Now;
+                //_dbContext.Purchases.Add(
+                //    new CSPurchase
+                //    {
+                //        UserID = user.Id,
+                //        Category = spending.Category,
+                //        Date = spending.Date,
+                //        Name = spending.PurchaseName,
+                //        Price = spending.Price,
+                //        Reason = spending.Reason
+                //    });
                 await _dbContext.SaveChangesAsync();
 
             }
