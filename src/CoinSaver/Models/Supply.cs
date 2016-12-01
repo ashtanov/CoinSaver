@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 
 namespace CoinSaver.Models
 {
-    public class Supply
+    public class Supply : Record
     {
-        public DateTime Date { get; set; }
-
         [Range(1, int.MaxValue, ErrorMessage = "Величина поступления должна быть больше 1")]
         [Required(ErrorMessage = "Укажите величину поступления")]
         public int Value { get; set; }
 
         [Required(ErrorMessage = "Укажите название поступления")]
         public string SupplyName { get; set; }
+
+        public override int GetBalanceValue()
+        {
+            return Value;
+        }
     }
 }

@@ -12,7 +12,7 @@
                 <form class="navbar-form" asp-action="AddPurchase">
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <input class="form-control" asp-for="Purchase.PurchaseName" placeholder="Название" />
-                    <input class="form-control" asp-for="Purchase.Price" placeholder="Цена" value="" />
+                    <input class="form-control" asp-for="Purchase.Value" placeholder="Цена" value="" />
                     <select class="form-control" asp-for="Purchase.Reason" asp-items="@Html.GetEnumSelectList<CoinSaver.Models.PurchaseReason>()"></select>
                     <select class="form-control" data-val="true" data-val-range="Укажите категорию" data-val-range-min="0" name="Purchase.Category" id="Purchase_Category">
                         @foreach (var el in @Html.GetEnumSelectListIntValues<CoinSaver.Models.PurchaseCategory>())
@@ -28,7 +28,7 @@
                             }
                         }
                     </select>
-                    <button class="btn btn-success" type="submit">Добавить</button>
+                    <button class="btn btn-danger" type="submit">Добавить</button>
                 </form>
             </div>
         </div>

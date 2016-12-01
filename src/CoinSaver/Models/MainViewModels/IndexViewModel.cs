@@ -11,6 +11,8 @@ namespace CoinSaver.Models
     {
         public string Name { get; set; }
 
-        public PurchasesTableVM PurchasesTable { get; set; }
+        public HistoryTableVM PurchasesTable { get; set; }
+
+        public int Balance { get; set; }
     }
 }

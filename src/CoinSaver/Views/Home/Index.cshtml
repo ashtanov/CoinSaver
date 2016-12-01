@@ -3,12 +3,25 @@
     ViewData["Title"] = "Добавить";
 }
 <h1>@ViewData["Title"]</h1>
+<div style="text-align:right">
+    <h2>
+        Баланс:
+        @if (Model.Balance < 0)
+        {
+            <span style="color:red">@Model.Balance</span>
+        }
+        else
+        {
+            <span style="color:green">@Model.Balance</span>
+        }
+    </h2>
+</div>
 <div class="page-header">
     @Html.Partial("AddRecord", new CoinSaver.Models.MainViewModels.PurchaseSupplyVM())
 </div>
 <div class="row">
-    <p>Последние @Model.PurchasesTable.Purchases.Count покупок:</p>
-    @Html.Partial("SpendingsTable", @Model.PurchasesTable)
+    <p>Последние @Model.PurchasesTable.Record.Count записей:</p>
+    @Html.Partial("HistoryTable", @Model.PurchasesTable)
 </div>
 
 @section Scripts {

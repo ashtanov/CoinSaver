@@ -1,0 +1,57 @@
+﻿@model CoinSaver.Models.MainViewModels.HistoryTableVM
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Название</th>
+                <th>Величина</th>
+                <th>Дата</th>
+                <th>Причина</th>
+                @if (Model.ShowCategoryColumn)
+                {
+                    <th>Категория</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+            }
+            @foreach (var r in Model.Record.OrderByDescending(x => x.Date))
+            {
+                if (r is CoinSaver.Models.Purchase)
+                {
+                    var p = r as CoinSaver.Models.Purchase;
+                    <tr>
+                        <td>@i</td>
+                        <td>@p.PurchaseName</td>
+                        <td class="alert-danger">@p.Value</td>
+                        <td>@p.Date.ToString("dd.MM.yy")</td>
+                        <td>@p.Reason.EnumDisplayNameFor()</td>
+                        @if (Model.ShowCategoryColumn)
+                        {
+                            <td class="@p.Category-clr">@p.Category.EnumDisplayNameFor()</td>
+                        }
+                    </tr>
+                }
+                else
+                {
+                    var s = r as CoinSaver.Models.Supply;
+                    <tr>
+                        <td>@i</td>
+                        <td>@s.SupplyName</td>
+                        <td class="alert-success">@s.Value</td>
+                        <td>@s.Date.ToString("dd.MM.yy")</td>
+                        <td>-</td>
+                        @if (Model.ShowCategoryColumn)
+                        {
+                            <td class="alert-success">Поступление</td>
+                        }
+                    </tr>
+                }
+                i++;
+            }
+        </tbody>
+    </table>
+</div>

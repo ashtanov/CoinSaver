@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace CoinSaver.Models.MainViewModels
 {
-    public class PurchasesTableVM
+    public class HistoryTableVM
     {
-        public IList<Purchase> Purchases { get; set; }
+        public IList<Record> Record { get; set; }
         public bool ShowCategoryColumn { get; set; }
     }
 }

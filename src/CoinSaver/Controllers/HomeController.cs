@@ -30,15 +30,15 @@ namespace CoinSaver.Controllers
 
         }
 
-        [Authorize(Roles ="Administrator")] //TODO: requests GetHistoryTable with username too
+        [Authorize(Roles = "Administrator")] //TODO: requests GetHistoryTable with username too
         public async Task<IActionResult> UserStat(PeriodVM period, string username)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user == null)
                 return RedirectToAction("Error");
             ViewData["Name"] = user.RealName ?? user.UserName;
-            var expUser =  username == null ? user : _userManager.Users.FirstOrDefault(x => x.NormalizedUserName == username.ToUpper());
-            var spendings = _dbContext.GetUserSpendings(expUser);
+            var expUser = username == null ? user : _userManager.Users.FirstOrDefault(x => x.NormalizedUserName == username.ToUpper());
+            var spendings = _dbContext.GetUserPurchases(expUser);
 
             if (spendings.Any())
             {
@@ -53,12 +53,12 @@ namespace CoinSaver.Controllers
 
 
                 //calc stat model
-                var totalSpend = spendings.Sum(x => x.Price);
+                var totalSpend = spendings.Sum(x => x.Value);
                 var calcStat = spendings
                             .GroupBy(x => x.Category)
                             .ToDictionary(k => k.Key, e =>
                             {
-                                var summ = e.Sum(c => c.Price);
+                                var summ = e.Sum(c => c.Value);
                                 return new StatVM.CatStat
                                 {
                                     Count = e.Count(),
@@ -71,7 +71,7 @@ namespace CoinSaver.Controllers
                     {
                         Name = user.UserName,
                         TotalPurchases = spendings.Count(),
-                        TotalSpend = spendings.Sum(x => x.Price),
+                        TotalSpend = spendings.Sum(x => x.Value),
                         PurchasesByCategory = calcStat,
                         Period = period
                     });
@@ -95,7 +95,7 @@ namespace CoinSaver.Controllers
             if (user == null)
                 return RedirectToAction("Error");
             ViewData["Name"] = user.RealName ?? user.UserName;
-            var spendings = _dbContext.GetUserSpendings(user);
+            var spendings = _dbContext.GetUserPurchases(user);
 
             if (spendings.Any())
             {
@@ -110,12 +110,12 @@ namespace CoinSaver.Controllers
 
 
                 //calc stat model
-                var totalSpend = spendings.Sum(x => x.Price);
+                var totalSpend = spendings.Sum(x => x.Value);
                 var calcStat = spendings
                             .GroupBy(x => x.Category)
                             .ToDictionary(k => k.Key, e =>
                             {
-                                var summ = e.Sum(c => c.Price);
+                                var summ = e.Sum(c => c.Value);
                                 return new StatVM.CatStat
                                 {
                                     Count = e.Count(),
@@ -128,7 +128,7 @@ namespace CoinSaver.Controllers
                     {
                         Name = user.UserName,
                         TotalPurchases = spendings.Count(),
-                        TotalSpend = spendings.Sum(x => x.Price),
+                        TotalSpend = spendings.Sum(x => x.Value),
                         PurchasesByCategory = calcStat,
                         Period = period
                     });
@@ -153,15 +153,26 @@ namespace CoinSaver.Controllers
             if (user == null)
                 return RedirectToAction("Login", "Account", new { });
             ViewData["Name"] = user.RealName ?? user.UserName;
-            var tableVm = new PurchasesTableVM
+            var pur = _dbContext.GetUserPurchases(user).Cast<Record>().OrderByDescending(x => x.Date).Take(20).ToList();
+            var sup = _dbContext.GetUserSupplies(user).Cast<Record>().OrderByDescending(x => x.Date).Take(20).ToList();
+
+            var purB = _dbContext.GetUserPurchases(user).Sum(x => x.Value);
+            var supB = _dbContext.GetUserSupplies(user).Sum(x => x.Value);
+            var records = 
+                pur.Union(sup)
+                .OrderByDescending(x => x.Date)
+                .Take(20)
+                .ToList();
+            var tableVm = new HistoryTableVM
             {
                 ShowCategoryColumn = true,
-                Purchases = _dbContext.GetUserSpendings(user).OrderByDescending(x => x.Date).Take(20).ToList()
+                Record = records
             };
             return View(new IndexViewModel
             {
                 Name = user.UserName,
-                PurchasesTable = tableVm
+                PurchasesTable = tableVm,
+                Balance = supB - purB
             });
         }
 
@@ -181,7 +192,7 @@ namespace CoinSaver.Controllers
                         Category = purchase.Category,
                         Date = purchase.Date,
                         Name = purchase.PurchaseName,
-                        Price = purchase.Price,
+                        Price = purchase.Value,
                         Reason = purchase.Reason
                     });
                 await _dbContext.SaveChangesAsync();
@@ -197,19 +208,17 @@ namespace CoinSaver.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (supply != null && ModelState.IsValid && user != null)
             {
-                //supply.Date = DateTime.Now;
-                //_dbContext.Purchases.Add(
-                //    new CSPurchase
-                //    {
-                //        UserID = user.Id,
-                //        Category = spending.Category,
-                //        Date = spending.Date,
-                //        Name = spending.PurchaseName,
-                //        Price = spending.Price,
-                //        Reason = spending.Reason
-                //    });
+                supply.Date = DateTime.Now;
+                _dbContext.Supplies.Add(
+                    new CSSupply
+                    {
+                        Name = supply.SupplyName,
+                        Value = supply.Value,
+                        Date = supply.Date,
+                        UserID = user.Id
+                    }
+                );
                 await _dbContext.SaveChangesAsync();
-
             }
             return RedirectToAction("Index");
         }
@@ -221,8 +230,8 @@ namespace CoinSaver.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user == null)
                 return new StatusCodeResult(403);
-            var table = _dbContext.GetUserSpendings(user);
-            var tableVM = new PurchasesTableVM { ShowCategoryColumn = false };
+            var table = _dbContext.GetUserPurchases(user);
+            var tableVM = new HistoryTableVM { ShowCategoryColumn = false };
 
             DateTime start, end;
             if (DateTime.TryParse(hvm.StartDate, out start) && DateTime.TryParse(hvm.EndDate, out end))
@@ -235,9 +244,9 @@ namespace CoinSaver.Controllers
                 return new StatusCodeResult(500);
             else
                 tableVM.ShowCategoryColumn = true;
-            tableVM.Purchases = table.ToList();
+            tableVM.Record = table.Cast<Record>().ToList();
 
-            return PartialView("SpendingsTable", tableVM);
+            return PartialView("HistoryTable", tableVM);
         }
 
         public IActionResult Error()
